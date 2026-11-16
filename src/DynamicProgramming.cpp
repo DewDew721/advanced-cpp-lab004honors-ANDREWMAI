@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <climits>
+#include <algorithm>
 
 std::string buildParenthesization(
     const std::vector<std::vector<int>>& split,
