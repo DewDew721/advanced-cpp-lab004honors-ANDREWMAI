@@ -1,6 +1,7 @@
 #include "project/DynamicProgramming.hpp"
 
 #include <stdexcept>
+#include <climits>
 
 std::string buildParenthesization(
     const std::vector<std::vector<int>>& split,
@@ -83,10 +84,13 @@ AlignmentResult globalSequenceAlignment(
     // Fill the DP table
     for (size_t i = 1; i <= m; ++i) {
         for (size_t j = 1; j <= n; ++j) {
-            int match = dp[i - 1][j - 1] + (first[i - 1] == second[j - 1] ? matchScore : mismatchScore);
-            int deleteOp = dp[i - 1][j] + gapScore;
-            int insertOp = dp[i][j - 1] + gapScore;
-            dp[i][j] = std::max({match, deleteOp, insertOp});
+            int match_cost = (first[i - 1] == second[j - 1]) ? matchScore : mismatchScore;
+            dp[i][j] = std::min({
+                dp[i - 1][j - 1] + match_cost, // diagonal
+                dp[i - 1][j] + gapScore,       // up
+                dp[i][j - 1] + gapScore        // left
+            });
+            
         }
     }
 
